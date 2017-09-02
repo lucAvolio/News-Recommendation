@@ -15,5 +15,15 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="C:/Users/lucav_000/Downloads/mongo-java-driver-3.4.0-beta1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/lucav_000/Downloads/json-20170516.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Documents/Università/TesiMagistrale/Openpermid Calais Tagging Tutorial/prereqs/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Documents/Università/TesiMagistrale/Openpermid Calais Tagging Tutorial/prereqs/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Documents/Università/TesiMagistrale/Openpermid Calais Tagging Tutorial/prereqs/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Documents/Università/TesiMagistrale/Excel/poi-3.16/poi-3.16.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Documents/Università/TesiMagistrale/Excel/poi-3.16/poi-excelant-3.16.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Documents/Università/TesiMagistrale/Excel/poi-3.16/poi-ooxml-3.16.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Documents/Università/TesiMagistrale/Excel/poi-3.16/poi-ooxml-schemas-3.16.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Documents/Università/TesiMagistrale/Excel/poi-3.16/poi-scratchpad-3.16.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Documents/Università/TesiMagistrale/Excel/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lucav_000/Downloads/commons-collections4-4.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
