@@ -149,7 +149,7 @@ public class HtmlAnnotation {
 					}
 				}
 			} catch(NullPointerException e) {
-				System.out.println("Error in getTopicsByUser, probably annotation is null: " + e.toString());
+//				System.out.println("Error in getTopicsByUser, probably annotation is null: " + e.toString());
 			}
 
 

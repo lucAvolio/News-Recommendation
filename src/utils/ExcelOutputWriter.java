@@ -12,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import model.Entity;
+import model.Site;
 
 public class ExcelOutputWriter {
 
@@ -79,4 +80,48 @@ public class ExcelOutputWriter {
 	}
 		return false;
 	}
+	
+	
+	public static boolean WriteRecommendation(List<Site> urls,String thisUser, String userToCompare) {
+		if(urls != null && urls.size() > 0) {
+			try {
+				XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream("Signals.xlsx"));
+				XSSFSheet sheet = workbook.createSheet("REC-"+thisUser+"-"+userToCompare);
+		        int rowCount = 0;
+		        
+		        for (Site u: urls) {
+		            Row row = sheet.createRow(++rowCount);
+		             
+		            int columnCount = 0;
+		            
+		            Cell cell_Name = row.createCell(++columnCount);
+		            cell_Name.setCellValue(u.getUrl());     
+		        }
+		        try (FileOutputStream outputStream = new FileOutputStream("Signals.xlsx")) {
+		            workbook.write(outputStream);
+		        }catch(IOException ex) {
+					System.out.println("Error in ExcelOutputWriter");
+					System.out.println(ex.toString());
+					return false;
+				}		
+				return true;
+			
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return false;
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return false;
+			}
+			finally {
+				return true;
+			}
+			
+	
+	}
+		return false;
+	}
+	
 }

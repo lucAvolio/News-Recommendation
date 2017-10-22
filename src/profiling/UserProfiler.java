@@ -151,6 +151,7 @@ public class UserProfiler {
 	
 	public static List<Entity> calculateSignal(List<Entity> entities, int frame,String user) {
 		entities = calculateTF_IDF(entities, frame);
+		//Save entities in DB
 		if(ExcelOutputWriter.ExcelOutputWriter(entities, user)){
 			System.out.println("Excel file created");
 		} else {
