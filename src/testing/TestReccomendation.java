@@ -101,7 +101,7 @@ public class TestReccomendation {
 				while(it_2.hasNext()) {
 					
 					Map.Entry<String, List<Entity>> userToMatch = it_2.next();
-					double val = CalculateNewsSimilarity(currentUser.getValue(),userToMatch.getValue());
+					double val = CalculateSim(currentUser.getValue(), userToMatch.getValue());
 					sim.add(currentUser.getKey() + "-" + userToMatch.getKey() + " " + val);
 				}
 			}
@@ -185,7 +185,7 @@ public class TestReccomendation {
 				while(it_2.hasNext()) {
 					
 					Map.Entry<String, List<Entity>> userToMatch = it_2.next();
-					double val = CalculateNewsSimilarity(currentUser.getValue(),userToMatch.getValue());
+					double val = CalculateSim(currentUser.getValue(), userToMatch.getValue());
 					sim.add(currentUser.getKey() + "-" + userToMatch.getKey() + " " + val);
 				}
 			}
@@ -357,7 +357,7 @@ public class TestReccomendation {
 				while(it_2.hasNext()) {
 					
 					Map.Entry<String, List<Entity>> userToMatch = it_2.next();
-					double val = CalculateNewsSimilarity(currentUser.getValue(),userToMatch.getValue());
+					double val = CalculateSim(currentUser.getValue(), userToMatch.getValue());
 					sim.add(currentUser.getKey() + "-" + userToMatch.getKey() + " " + val);
 				}
 			}
@@ -411,6 +411,7 @@ public class TestReccomendation {
 
 	}
 
+	//COSENO SIMILARITà
 	public static double CalculateNewsSimilarity(List<Entity> e1Lst, List<Entity> e2Lst){
 		double result = 0.0;
 		if(e1Lst.size() != 0 && e2Lst.size() != 0){
@@ -437,7 +438,115 @@ public class TestReccomendation {
 		return result;
 	}
 
+	//COEFFICIENTE PEARSON
+	public static double CalculateSimilarityPearson(List<Entity> e1Lst, List<Entity> e2Lst){
+		try{
+			double result = 0.0;
+			
+			if(e1Lst != null && e1Lst.size()> 0 && e2Lst != null && e2Lst.size()>0){
+				//CALCOLO COVARIANZA e SCARTO QUADRATICO MEDIO
+				double sqm1 = 0.0;
+				double sqm2 = 0.0;
+				double media1 = 0.0;
+				double media2 = 0.0;
+				double cov = 0.0;
+				int maxsize = 0;
+				if(e1Lst.size() > e2Lst.size())
+					maxsize = e1Lst.size();
+				else
+					maxsize = e2Lst.size();			
+				for(Entity e: e1Lst){
+					media1 += e.getTf_idf();
+				}
+				media1 = media1/maxsize;			
+				for(Entity e: e2Lst){
+					media2 += e.getTf_idf();
+				}
+				media2 = media2/maxsize;				
+				for(Entity e1: e1Lst){
+					sqm1 += Math.pow(e1.getTf_idf() - media1,2);
+					if(e2Lst.contains(e1)){
+						Entity e2 = e2Lst.get(e2Lst.indexOf(e1));
+						cov += (e1.getTf_idf() - media1) * (e2.getTf_idf() - media2);
+					}
+					else {
+						cov += (e1.getTf_idf() - media1) * (0 - media2);
+					}
+				}
+				
+				for(Entity e2: e2Lst){
+					sqm2 += Math.pow(e2.getTf_idf() - media2,2);
+					if(!e1Lst.contains(e2)){
+						cov += (0 - media1) * (e2.getTf_idf() - media2);
+					}
+				}
 
+				cov = cov/(maxsize-1);
+				sqm1 = Math.sqrt(sqm1 / (maxsize-1));
+				sqm2 = Math.sqrt(sqm2 / (maxsize-1));
+			
+				//Coefficente correlazione PEARSON
+				result = cov / (sqm1 * sqm2);	
+			}
+			
+			return result;
+		}
+		catch (Exception ex){
+			System.out.println(ex.toString());
+			return 0.0;
+		}
+	}
+
+	//JACCARD
+	public static double CalculateSimilarityJaccard(List<Entity> e1Lst, List<Entity> e2Lst){
+		double result = 0.0;
+		if(e1Lst != null && e1Lst.size() > 0 && e2Lst != null && e2Lst.size() > 0){
+			double num_union = 0.0;
+			double num_intersect = 0.0;
+			//Somma dei tf_idf di tutte le entità delle due liste
+			for(Entity e: e1Lst){
+				if(e2Lst.contains(e)){
+					num_intersect += e.getTf_idf() + e2Lst.get(e2Lst.indexOf(e)).getTf_idf();
+					num_union += e.getTf_idf() + e2Lst.get(e2Lst.indexOf(e)).getTf_idf();
+				}
+				else {
+					num_union += e.getTf_idf();
+				}
+			}
+			for(Entity e: e2Lst){
+				if(!e1Lst.contains(e)){
+					num_union += e.getTf_idf();
+				}
+			}
+			
+			result = num_intersect / num_union;
+		}		
+		return result;
+	}
+	
+	//TANIMOTO
+	public static double CalculateSimilarityTanimoto (List<Entity> e1Lst, List<Entity> e2Lst){
+		double result = 0.0;
+		if(e1Lst != null && e1Lst.size() > 0 && e2Lst != null && e2Lst.size() > 0){
+			double numerator = 0.0;
+			double norma1 = 0.0;
+			double norma2 = 0.0;
+			//Somma dei tf_idf di tutte le entità delle due liste
+			for(Entity e: e1Lst){
+				norma1 += Math.pow(e.getTf_idf(),2);
+				if(e2Lst.contains(e)){
+					numerator += (e.getTf_idf() * e2Lst.get(e2Lst.indexOf(e)).getTf_idf());				
+				}
+			}
+			for(Entity e: e2Lst){
+				norma2 += Math.pow(e.getTf_idf(), 2);
+			}
+			
+			result = numerator / (norma1 + norma2 - numerator);
+			
+		}		
+		return result;
+	}
 	public static List<Entity> calculateTfIdf(String user, MongoCollection<Document> coll){
 		//		//CONNECT TO DB
 		//		MongoClient mongoClient = new MongoClient("localhost",27017);		
@@ -509,5 +618,24 @@ public class TestReccomendation {
 		} catch(Exception ex){
 			return new ArrayList<Document>();
 		}
+	}
+
+	public static double CalculateSim(List<Entity> eLst1, List<Entity> eLst2){
+		String modality = FileConfigReader.ReadKey("similarity");
+		if(modality.equals("Pearson")){
+			return CalculateSimilarityPearson(eLst1, eLst2);
+		}
+		else if(modality.equals("Cosine")){
+			return CalculateNewsSimilarity(eLst1, eLst2);
+		}
+		else if(modality.equals("Jaccard")){
+			return CalculateSimilarityJaccard(eLst1, eLst2);
+		}
+		else if(modality.equals("Tanimoto")){
+			return CalculateSimilarityTanimoto(eLst1, eLst2);			
+		}
+		else
+			System.out.println("Non è stata scelta una similarità");
+		return 0.0;
 	}
 }
